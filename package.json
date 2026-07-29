@@ -1,0 +1,29 @@
+{
+  "name": "adidas-inventory-sync",
+  "version": "1.0.0",
+  "description": "REST API for centralized inventory management and stock synchronization.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebasjq/adidas-inventory-sync.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sebasjq/adidas-inventory-sync/issues"
+  },
+  "homepage": "https://github.com/sebasjq/adidas-inventory-sync#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
