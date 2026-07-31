@@ -6,6 +6,7 @@ const runSeed = require('./database/run_seed');
 
 // Import the Routes
 const storesRoutes = require('./routes/stores'); 
+const inventoryRoutes = require('./routes/inventory');
 
 // Calling functions to run the schema and seed the database before starting the server
 runSchema();
@@ -20,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/stores', storesRoutes); // Using the stores routes for any requests that start with /stores
-
+app.use('/inventory', inventoryRoutes); // Using the inventory routes for any requests that start with /inventory
 
 const PORT = process.env.PORT || 3000;
 
