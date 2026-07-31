@@ -7,10 +7,11 @@ const runSeed = require('./database/run_seed');
 // Import the Routes
 const storesRoutes = require('./routes/stores'); 
 const inventoryRoutes = require('./routes/inventory');
+const API = require('./middleware/apiAuth'); // Importing the API authentication middleware
 
 // Calling functions to run the schema and seed the database before starting the server
 runSchema();
-runSeed(); 
+runSeed();
 
 const app = express(); // Creating an Express server instance. Initialize the database before accepting requests
 app.use(express.json()); // Whenever data is sent in JSON format, it will be converted to a JavaScript object automatically,
