@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/sebasjq/adidas-inventory-sync#readme",
   "dependencies": {
-    "cors": "^2.8.6",
+    "better-sqlite3": "^13.0.2",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
   },
