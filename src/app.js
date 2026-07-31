@@ -4,6 +4,9 @@ const express = require('express'); // Importing Express library
 const runSchema = require('./database/run_schema');
 const runSeed = require('./database/run_seed');
 
+// Import the Routes
+const storesRoutes = require('./routes/stores'); 
+
 // Calling functions to run the schema and seed the database before starting the server
 runSchema();
 runSeed(); 
@@ -15,6 +18,8 @@ app.use(express.json()); // Whenever data is sent in JSON format, it will be con
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the Adidas Stock Sync API' });
 });
+
+app.use('/stores', storesRoutes); // Using the stores routes for any requests that start with /stores
 
 
 const PORT = process.env.PORT || 3000;
