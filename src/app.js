@@ -1,10 +1,12 @@
 require('dotenv').config(); // Loading environment variables from .env file. It goes at first because some of the other imported modules may depend on these environment variables
 
 const express = require('express'); // Importing Express library
-const runSchema = require('./database/run_schema'); // Importing the runSchema function from run_schema.js
+const runSchema = require('./database/run_schema');
+const runSeed = require('./database/run_seed');
 
-// Execute the schema to create the necessary tables in the database
-runSchema(); // Calling the function
+// Calling functions to run the schema and seed the database before starting the server
+runSchema();
+runSeed(); 
 
 const app = express(); // Creating an Express server instance. Initialize the database before accepting requests
 app.use(express.json()); // Whenever data is sent in JSON format, it will be converted to a JavaScript object automatically,
