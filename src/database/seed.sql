@@ -1,8 +1,8 @@
 INSERT OR IGNORE INTO stores (name, api_key) 
 VALUES 
 ('Adidas Bogotá', 'api-key-bogota'), 
-('Adidas Pereira', 'api_key_pereira'), 
-('Adidas Medellín', 'api_key_medellin');
+('Adidas Pereira', 'api-key-pereira'), 
+('Adidas Medellín', 'api-key-medellin');
 
 
 INSERT OR IGNORE INTO products (name)
