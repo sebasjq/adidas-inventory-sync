@@ -2,6 +2,8 @@ const inventoryModel = require('../models/inventory');
 
 // Controller function to get all inventory with filters applied
 function listInventory(req, res) {
+    
+    // Extracting filters from the query parameters of the request
     const filters = {
         storeId: req.query.store_id,
         productId: req.query.product_id,
