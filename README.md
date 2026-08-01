@@ -175,3 +175,7 @@ This project was developed as a backend-focused challenge.
 Currently, it does not include a graphical user interface. All API functionality is intended to be tested using Postman.
 
 Additionally, stock movement history is not implemented, since it was considered an optional feature for the scope of this project.
+
+## Presentation
+
+Youtube Link:
