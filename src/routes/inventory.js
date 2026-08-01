@@ -15,5 +15,8 @@ router.post('/stock-report', API.apiAuth, inventoryController.stockReport);
 // Creating a route to consolidate inventory across all stores
 router.get('/consolidate', inventoryController.consolidateInventory);
 
+// Creating a route to get low stock report
+router.get('/low-stock', inventoryController.lowStockReport); // Route to get low stock report
+
 // Export the router to be used in other parts of the application
 module.exports = router;
