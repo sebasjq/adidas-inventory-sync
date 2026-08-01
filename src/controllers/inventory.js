@@ -49,8 +49,21 @@ function consolidateInventory(req, res) {
     res.json(consolidatedInventory);
 }
 
+function lowStockReport(req, res) {
+
+    const filters = {
+        storeId: req.query.store_id,
+    }
+
+    const threshold = parseInt(process.env.LOW_STOCK_THRESHOLD); // Get the low stock threshold from environment variables
+    
+    const lowStockItems = inventoryModel.getLowStockReport(threshold, filters);
+    res.json(lowStockItems);
+}
+
 module.exports = {
     listInventory,
     stockReport,
     consolidateInventory,
+    lowStockReport
 }; 

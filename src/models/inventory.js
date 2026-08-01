@@ -106,8 +106,49 @@ function sumStockAcrossStores(filters) {
     return result
 }
 
+function getLowStockReport(threshold, filters) {
+
+    const conditions = [];
+    const values = [threshold]; // Start with the threshold value for the low stock condition
+
+    if (filters.storeId) {
+        conditions.push('inventory.store_id = ?');
+        values.push(filters.storeId);
+    }
+
+    // Query to get low stock items based on the provided threshold
+    // Thei idea is to join the inventory table with the stores and 
+    // products tables to get the store name and product name along with the stock information
+    // and filter the results to only include items where the stock is below the specified threshold
+    let sqlText = `
+        SELECT inventory.store_id, stores.name as store_name,
+        inventory.product_id, products.name as product_name, 
+        inventory.stock
+
+        FROM inventory
+
+        JOIN stores
+        ON inventory.store_id = stores.id
+
+        JOIN products
+        ON inventory.product_id = products.id
+
+        WHERE inventory.stock < ?
+    `;
+
+    if (conditions.length > 0) {
+        sqlText += ` AND ${conditions.join(' AND ')}`; // We use AND anyways for further filtering conditions.
+    }
+    
+    const stmt = db.prepare(sqlText); // Prepare the SQL statement with the constructed query
+
+    const lowStockItems = stmt.all(...values); // Execute the query with the provided threshold and return the result
+    return lowStockItems;
+}
+
 module.exports = {
     getInventory,
     stockManagement,
     sumStockAcrossStores,
+    getLowStockReport
 };
