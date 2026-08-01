@@ -67,7 +67,7 @@ function stockManagement(storeId, productId, flow, quantity, threshold) {
         return { error: "Product not found in the inventory for the given store." };
     }
 
-    let updateStmt; // Declare newStock variable to hold the updated stock value
+    let updateStmt; // Declare updateStmt variable to hold the updated stock value
     let updateResult;
 
     // Update the stock based on the flow (in or out) and quantity
