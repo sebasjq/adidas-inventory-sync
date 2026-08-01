@@ -44,7 +44,6 @@ function getInventory(filters) {
     return inventory;
 }
 
-
 function stockManagement(storeId, productId, flow, quantity) {
     // update the stock based on the flow (in or out) and quantity
     const currentStock = db.prepare('SELECT stock FROM inventory WHERE store_id = ? AND product_id = ?');
@@ -78,9 +77,37 @@ function stockManagement(storeId, productId, flow, quantity) {
     return { message: `Stock updated. New stock: ${newStock}` };
 }
 
+function sumStockAcrossStores(filters) {
+    const conditions = []; // Array to hold the conditions for the SQL query
+    const values = []; // Array to hold the values for the SQL query parameters. For dynamic filtering
 
+    if (filters.productId) {
+        conditions.push('inventory.product_id = ?');
+        values.push(filters.productId);
+    }
+
+    let sqlText = `
+        SELECT products.id as product_id, products.name as product_name, SUM(inventory.stock) as total_stock
+        FROM inventory
+
+        JOIN products
+        ON inventory.product_id = products.id
+    `;
+    
+    // If there are any conditions, append the WHERE clause to the SQL query
+    if (conditions.length > 0) {
+        sqlText += ` WHERE ${conditions.join(' AND ')}`;
+    }
+
+    sqlText += ` GROUP BY products.id, products.name`; // Grouping by product ID and name to get the total stock for each product
+
+    const stmt = db.prepare(sqlText); // Prepare the SQL statement with the constructed query
+    const result = stmt.all(...values); // Execute the query with the provided values and return the result
+    return result
+}
 
 module.exports = {
     getInventory,
     stockManagement,
+    sumStockAcrossStores,
 };

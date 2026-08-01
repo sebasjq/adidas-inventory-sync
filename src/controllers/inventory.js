@@ -11,7 +11,6 @@ function listInventory(req, res) {
     res.json(inventory);
 }
 
-
 function stockReport(req, res) {
     // Info from middleware
     const storeId = req.store.id; // Get the store ID from the authenticated request
@@ -39,7 +38,19 @@ function stockReport(req, res) {
 
 }
 
+// Controller function to consolidate inventory across all stores
+// It's gonna be passed 
+function consolidateInventory(req, res) {
+    const filters = {
+        productId: req.query.product_id,
+    }
+    
+    const consolidatedInventory = inventoryModel.sumStockAcrossStores(filters);
+    res.json(consolidatedInventory);
+}
+
 module.exports = {
     listInventory,
     stockReport,
+    consolidateInventory,
 }; 
