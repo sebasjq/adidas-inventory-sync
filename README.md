@@ -178,4 +178,4 @@ Additionally, stock movement history is not implemented, since it was considered
 
 ## Presentation
 
-Youtube Link:
+Youtube Link: https://youtu.be/Jv7NdKauVMc
