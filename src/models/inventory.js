@@ -46,6 +46,8 @@ function getInventory(filters) {
 
 function stockManagement(storeId, productId, flow, quantity, threshold) {
     // update the stock based on the flow (in or out) and quantity
+    
+    // currentStock query to get the current stock for the given store and product
     const currentStock = db.prepare(`
         SELECT inventory.stock, stores.name as store_name, products.name as product_name
         

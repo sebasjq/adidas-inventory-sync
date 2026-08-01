@@ -53,7 +53,6 @@ function stockReport(req, res) {
 }
 
 // Controller function to consolidate inventory across all stores
-// It's gonna be passed 
 function consolidateInventory(req, res) {
     const filters = {
         productId: req.query.product_id,
