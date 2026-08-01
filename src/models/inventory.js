@@ -67,26 +67,31 @@ function stockManagement(storeId, productId, flow, quantity, threshold) {
         return { error: "Product not found in the inventory for the given store." };
     }
 
-    let newStock; // Declare newStock variable to hold the updated stock value
+    let updateStmt; // Declare newStock variable to hold the updated stock value
+    let updateResult;
 
     // Update the stock based on the flow (in or out) and quantity
     if (flow === 'in') {
-        newStock = stockResult.stock + quantity; // Access to the property stock of the object returned by the query
+        // For 'in' flow, we simply increase the stock by the specified quantity, without any need to check for sufficiency since we are adding stock
+        updateStmt = db.prepare('UPDATE inventory SET stock = stock + ? WHERE store_id = ? AND product_id = ?');
+
+        updateResult = updateStmt.run(quantity, storeId, productId); // Execute the update statement to increase the stock by the specified quantity
     }
 
     if (flow === 'out') {
-        if (stockResult.stock < quantity) {
-            // If the current stock is less than the quantity to be removed, send an error message indicating insufficient stock
+        // Different approach for 'out' flow: we need to check if the stock is sufficient before updating
+        updateStmt = db.prepare('UPDATE inventory SET stock = stock - ? WHERE store_id = ? AND product_id = ? AND stock >= ?');
+        updateResult = updateStmt.run(quantity, storeId, productId, quantity); // Execute the update statement to decrease the stock by the specified quantity
+
+        // Check if the update affected any rows, if not, it means the stock was insufficient to perform the operation
+        if (updateResult.changes === 0) {
             return { error: "Insufficient stock to remove the specified quantity. Current stock: " + stockResult.stock };
-        }
-        else {
-            newStock = stockResult.stock - quantity; // Access to the property stock of the object returned by the query
         }
     }
 
-    // Update the stock in the database for the given store and product
-    const updateStmt = db.prepare('UPDATE inventory SET stock = ? WHERE store_id = ? AND product_id = ?');
-    updateStmt.run(newStock, storeId, productId); // run is used to execute the update
+    // We need to get the stock again after the update to include it in the response
+    const newStockResult = currentStock.get(storeId, productId);
+    const newStock = newStockResult.stock; // Get the updated stock value after the update
 
     // response object
     const response = {
