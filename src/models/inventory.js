@@ -44,11 +44,23 @@ function getInventory(filters) {
     return inventory;
 }
 
-function stockManagement(storeId, productId, flow, quantity) {
+function stockManagement(storeId, productId, flow, quantity, threshold) {
     // update the stock based on the flow (in or out) and quantity
-    const currentStock = db.prepare('SELECT stock FROM inventory WHERE store_id = ? AND product_id = ?');
+    const currentStock = db.prepare(`
+        SELECT inventory.stock, stores.name as store_name, products.name as product_name
+        
+        FROM inventory
 
-    const stockResult = currentStock.get(storeId, productId);
+        JOIN stores
+        ON inventory.store_id = stores.id
+
+        JOIN products
+        ON inventory.product_id = products.id
+
+        WHERE store_id = ? AND product_id = ?
+        `);
+
+    const stockResult = currentStock.get(storeId, productId); // Executing the query to get the current stock for the given store and product
 
     if (!stockResult) {
         // If no record exists for the given store and product, send a message indicating that the product is not found in the inventory
@@ -57,7 +69,7 @@ function stockManagement(storeId, productId, flow, quantity) {
 
     let newStock; // Declare newStock variable to hold the updated stock value
 
-
+    // Update the stock based on the flow (in or out) and quantity
     if (flow === 'in') {
         newStock = stockResult.stock + quantity; // Access to the property stock of the object returned by the query
     }
@@ -67,14 +79,30 @@ function stockManagement(storeId, productId, flow, quantity) {
             // If the current stock is less than the quantity to be removed, send an error message indicating insufficient stock
             return { error: "Insufficient stock to remove the specified quantity. Current stock: " + stockResult.stock };
         }
-        else{
+        else {
             newStock = stockResult.stock - quantity; // Access to the property stock of the object returned by the query
         }
     }
 
+    // Update the stock in the database for the given store and product
     const updateStmt = db.prepare('UPDATE inventory SET stock = ? WHERE store_id = ? AND product_id = ?');
-    updateStmt.run(newStock, storeId, productId);
-    return { message: `Stock updated. New stock: ${newStock}` };
+    updateStmt.run(newStock, storeId, productId); // run is used to execute the update
+
+    // response object
+    const response = {
+        message: `Stock updated. New stock: ${newStock}`,
+        store_id: storeId,
+        store_name: stockResult.store_name,
+        product_id: productId,
+        product_name: stockResult.product_name,
+        newStock: newStock
+    };
+
+    if (newStock <= threshold) {
+        response.warning = `Warning: The stock for this product is below the configured threshold of ${threshold}.`;
+    }
+
+    return response;
 }
 
 function sumStockAcrossStores(filters) {
@@ -133,7 +161,7 @@ function getLowStockReport(threshold, filters) {
         JOIN products
         ON inventory.product_id = products.id
 
-        WHERE inventory.stock < ?
+        WHERE inventory.stock <= ?
     `;
 
     if (conditions.length > 0) {
