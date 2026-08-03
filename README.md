@@ -176,6 +176,31 @@ Currently, it does not include a graphical user interface. All API functionality
 
 Additionally, stock movement history is not implemented, since it was considered an optional feature for the scope of this project.
 
-## Presentation
+---
 
-Youtube Link: https://youtu.be/Jv7NdKauVMc
+## References and Documentation
+
+The following resources were consulted during the development of this project:
+
+- [better-sqlite3 — npm Package](https://www.npmjs.com/package/better-sqlite3)  
+  Package information, installation instructions, and general usage documentation.
+
+- [better-sqlite3 — API Documentation](https://github.com/WiseLibs/better-sqlite3/blob/HEAD/docs/api.md)  
+  Official API documentation for database connections, prepared statements, queries, and transactions.
+
+- [better-sqlite3 — Database.exec()](https://github.com/WiseLibs/better-sqlite3/blob/HEAD/docs/api.md#execstring---this)  
+  Documentation for executing SQL strings, used during database schema and seed initialization.
+
+- [How To Use `__dirname` in Node.js — DigitalOcean](https://www.digitalocean.com/community/tutorials/nodejs-how-to-use__dirname)  
+  Reference for resolving directory paths when loading database and SQL files.
+
+- [Node.js Path Module](https://nodejs.org/api/path.html)  
+  Official documentation for working with file and directory paths.
+
+- [Express 5.x Routing Guide](https://expressjs.com/en/5x/guide/routing/)  
+  Official documentation for defining routes, route parameters, and HTTP request handlers.
+
+- [How to Read Environment Variables from Node.js](https://nodejs.org/learn/command-line/how-to-read-environment-variables-from-nodejs)  
+  Official Node.js documentation for accessing environment variables through `process.env`.
+
+These resources were used as technical documentation and learning references during the implementation of the project.
